@@ -2,9 +2,11 @@
 
 namespace App\View\Components;
 
+use App\Models\Category;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\DB;
 
 class SideBar extends Component
 {
@@ -21,6 +23,13 @@ class SideBar extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partial.side-bar');
+        $categories = Category::select('categories.id', 'categories.title', 'categories.slug', DB::raw('count(*) as total'))
+            ->join('category_post', 'categories.id', '=', 'category_post.category_id')
+            ->groupBy('categories.id')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        return view('components.partial.side-bar', compact('categories'));
     }
 }

@@ -33,7 +33,7 @@ class TextWidgetResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(2048),
-                Forms\Components\Textarea::make('content')
+                Forms\Components\RichEditor::make('content')
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('active')
                     ->required(),
@@ -64,8 +64,8 @@ class TextWidgetResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -86,7 +86,6 @@ class TextWidgetResource extends Resource
         return [
             'index' => Pages\ListTextWidgets::route('/'),
             'create' => Pages\CreateTextWidget::route('/create'),
-            'view' => Pages\ViewTextWidget::route('/{record}'),
             'edit' => Pages\EditTextWidget::route('/{record}/edit'),
         ];
     }
