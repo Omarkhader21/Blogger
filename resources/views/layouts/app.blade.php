@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $metaTitle?: 'Blogsprint' }}</title>
+    <title>{{ $metaTitle ?: 'Blogsprint' }}</title>
     <meta name="author" content="">
     <meta name="description" content="{{ $metaDescription }}">
 
@@ -14,13 +14,17 @@
     </style>
 
     <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+        integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+
+    @livewireStyles
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="bg-gray-50 font-family-karla">
 
-    
+
     <x-partial.nav-bar :categories="$categories"></x-partial.nav-bar>
 
     <div class="container mx-auto flex flex-wrap py-6">
@@ -58,5 +62,7 @@
         }
     </script>
 
+    @livewireScripts
 </body>
+
 </html>
