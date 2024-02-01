@@ -21,7 +21,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Content'; 
+    protected static ?string $navigationGroup = 'Content';
 
     public static function form(Form $form): Form
     {
@@ -31,7 +31,7 @@ class CategoryResource extends Resource
                     ->required()
                     ->maxLength(2048)
                     ->afterStateUpdated(function (Set $set, ?string $state) {
-                            $set('slug', \Illuminate\Support\Str::slug($state));
+                        $set('slug', \Illuminate\Support\Str::slug($state));
                     })
                     ->live(onBlur: true),
                 Forms\Components\TextInput::make('slug')
@@ -45,6 +45,7 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

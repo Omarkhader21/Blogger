@@ -19,7 +19,7 @@
                     <h1 class="text-3xl font-bold hover:text-gray-700 pb-4">{{ $post->title }}</h1>
                     <p href="#" class="text-sm pb-8">
                         By <a href="#" class="font-semibold hover:text-gray-800">{{ $post->user->name }}</a>,
-                        {{ $post->getDateFormattedDate() }}
+                        {{ $post->getDateFormattedDate() }} | {{ $post->humanReadTime }}
                     </p>
                     <div class="pb-3">
                         {!! $post->body !!}
