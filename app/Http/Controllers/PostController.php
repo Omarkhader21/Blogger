@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\PostView;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -66,21 +67,21 @@ class PostController extends Controller
 
         // Show recent categories with their latest posts
         $categories = Category::query()
-                        // ->with(['posts' => function($query) {
-                        //     $query->orderByDesc('published_at');
-                        // }])
-                        ->whereHas('posts', function($query) {
-                            $query->where('active', '=', 1)
-                            ->whereDate('published_at', '<', Carbon::now());
-                        })
-                        ->select('categories.*')
-                        ->selectRaw('Max(posts.published_at) as max_date')
-                        ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
-                        ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
-                        ->orderByDesc('max_date')
-                        ->groupBy('categories.id')
-                        ->limit(5)
-                        ->get();
+            // ->with(['posts' => function($query) {
+            //     $query->orderByDesc('published_at');
+            // }])
+            ->whereHas('posts', function ($query) {
+                $query->where('active', '=', 1)
+                    ->whereDate('published_at', '<', Carbon::now());
+            })
+            ->select('categories.*')
+            ->selectRaw('Max(posts.published_at) as max_date')
+            ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
+            ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
+            ->orderByDesc('max_date')
+            ->groupBy('categories.id')
+            ->limit(5)
+            ->get();
 
         // $posts = Post::query()
         //     ->where('active', '=', 1)
@@ -134,12 +135,31 @@ class PostController extends Controller
 
         $user = $request->user();
 
-        PostView::create([
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'post_id' => $post->id,
-            'user_id' => $user?->id
-        ]);
+        try {
+            // Deserialize the cookie value before using it
+            $openedPosts = unserialize(request()->cookie('opened_posts', '[]'));
+        } catch (\Throwable $e) {
+            // Handle the error, set $openedPosts to an empty array
+            $openedPosts = [];
+        }
+        
+        if (!in_array($post->id, $openedPosts)) {
+            // Add the post to the opened posts array
+            $openedPosts[] = $post->id;
+
+            // Serialize the array before storing it in the cookie
+            $cookieValue = serialize($openedPosts);
+
+            // Save to cookie (expires in every hour)
+            Cookie::queue(cookie('opened_posts', $cookieValue, 60));
+            // Save to database
+            PostView::create([
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'post_id' => $post->id,
+                'user_id' => $user?->id
+            ]);
+        }
 
         return view('post.view', compact('post', 'next', 'previous'));
     }
