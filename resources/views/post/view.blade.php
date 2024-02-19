@@ -2,7 +2,7 @@
     <div class="container mx-auto flex flex-wrap py-6">
 
         <!-- Post Section -->
-        <section class="w-full md:w-2/3 flex flex-col items-center px-3">
+        <section class="w-full md:w-2/3 flex flex-col px-3">
 
             <article class="flex flex-col shadow my-4">
                 <!-- Article Image -->
@@ -50,6 +50,9 @@
                     </a>
                 </div>
             </div>
+
+            <livewire:comments :post="$post"></livewire:comments>
+
         </section>
 
         <!-- Sidebar Section -->

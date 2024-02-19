@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('published_at')->nullable(true);
             $table->foreignIdFor(User::class, 'user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
