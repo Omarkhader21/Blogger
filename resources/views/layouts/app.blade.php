@@ -28,7 +28,6 @@
     <x-partial.nav-bar :categories="$categories"></x-partial.nav-bar>
 
     <div class="container mx-auto flex flex-wrap py-6">
-
         <!-- Posts Section -->
         {{ $slot }}
 
