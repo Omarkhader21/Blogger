@@ -38,4 +38,13 @@ class TextWidget extends Model
 
         return '';
     }
+
+    public function getThumbnail()
+    {
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+
+        return '/storage/' . $this->image;
+    }
 }

@@ -7,7 +7,7 @@
             <article class="flex flex-col shadow my-4">
                 <!-- Article Image -->
                 <a href="#" class="hover:opacity-75">
-                    <img src="/storage/{{ $widget->image }}" class="w-full items-center">
+                    <img src="{{ $widget->getThumbnail() }}" class="w-full items-center">
                 </a>
                 <div class="bg-white flex flex-col justify-start p-6">
                     <h1 class="text-3xl font-bold hover:text-gray-700 pb-4">{{ $widget->title }}</h1>
